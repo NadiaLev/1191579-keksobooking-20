@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
-* Студент: [Надежда  Палаш](https://up.htmlacademy.ru/javascript/20/user/1191579).
-* Наставник: `Неизвестно`.
+* Студент: [Надежда Палаш](https://up.htmlacademy.ru/javascript/20/user/1191579).
+* Наставник: Вадим Новаш.
 
 ---
 
