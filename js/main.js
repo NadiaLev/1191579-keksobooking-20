@@ -1,14 +1,30 @@
 'use strict';
 
 
-var TYPE_LIST = ['palace', 'flat', 'house', 'bungalo'];
-var CHECK_LIST = ['12:00', '13:00', '14:00'];
-var FEATURES_LIST = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-var PHOTOS_LIST = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
-var NUMBER_ADS = 8;
-var NUMBER_AVATARS = 8;
-var avatarList = [];
-var ads = [];
+var TYPE_LIST = [
+  'palace',
+  'flat',
+  'house',
+  'bungalo'
+];
+var CHECK_LIST = [
+  '12:00',
+  '13:00',
+  '14:00'
+];
+var FEATURES_LIST = [
+  'wifi',
+  'dishwasher',
+  'parking',
+  'washer',
+  'elevator',
+  'conditioner'
+];
+var PHOTOS_LIST = [
+  'http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
+];
+var ELEMENTS_AMOUNT = 8;
+
 
 var map = document.querySelector('.map');
 map.classList.remove('map--faded');
@@ -24,54 +40,46 @@ var arrayRandElement = function (arr) {
   return arr[rand];
 };
 
-var getAvatarArray = function (avatar) {
-  for (var avatarElement = 0; avatarElement < NUMBER_AVATARS; avatarElement++) {
-    var avatarElementNumber = avatarElement + 1;
-    avatarList[avatarElement] = 'img/avatars/user0' + avatarElementNumber + '.png';
+var getRandomNumber = function (min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+};
+
+var createArrayOfObjects = function (count) {
+  var result = [];
+
+  for (var i = 0; i < count; i++) {
+    var locationX = getRandomNumber(50, 1150);
+    var locationY = getRandomNumber(130, 630);
+
+    var element = {
+      author: {
+        avatar: 'img/avatars/user0' + (i + 1) + '.png'
+      },
+      offer: {
+        title: 'Заголовок предложения',
+        address: String(locationX) + ',' + String(locationY),
+        price: getRandomNumber(200, 2000),
+        type: arrayRandElement(TYPE_LIST),
+        rooms: getRandomNumber(1, 5),
+        guests: getRandomNumber(1, 10),
+        checkin: arrayRandElement(CHECK_LIST),
+        checkout: arrayRandElement(CHECK_LIST),
+        features: FEATURES_LIST.slice(getRandomNumber(0, 3), getRandomNumber(4, 7)),
+        description: 'Строка с описанием',
+        photos: PHOTOS_LIST.slice(getRandomNumber(0, 1), getRandomNumber(2, 3))
+      },
+      location: {
+        x: locationX,
+        y: locationY
+      }
+    };
+    result.push(element);
   }
 
-  return avatar;
+  return result;
 };
 
-var numberRand = function (from, to) {
-  return Math.floor(Math.random() * (to - from + 1) + from);
-};
-
-var createAd = function (element) {
-  var locationX = numberRand(50, 1150);
-  var locationY = numberRand(130, 630);
-
-  element = {
-    author: {
-      avatar: getAvatarArray(avatarList)
-    },
-    offer: {
-      title: 'Заголовок предложения',
-      address: String(locationX) + ',' + String(locationY),
-      price: numberRand(200, 2000),
-      type: arrayRandElement(TYPE_LIST),
-      rooms: numberRand(1, 5),
-      guests: numberRand(1, 10),
-      checkin: arrayRandElement(CHECK_LIST),
-      checkout: arrayRandElement(CHECK_LIST),
-      features: FEATURES_LIST.slice(numberRand(0, 3), numberRand(4, 7)),
-      description: 'Строка с описанием',
-      photos: PHOTOS_LIST.slice(numberRand(0, 1), numberRand(2, 3))
-    },
-    location: {
-      x: locationX,
-      y: locationY
-    }
-  };
-
-  return element;
-};
-
-
-for (var j = 0; j < NUMBER_ADS; j++) {
-  ads[j] = createAd(ads[j]);
-  ads[j].author.avatar = avatarList[j];
-}
+createArrayOfObjects(ELEMENTS_AMOUNT);
 
 var renderPin = function (pin) {
   var pinElement = pinTemplate.cloneNode(true);
@@ -84,7 +92,7 @@ var renderPin = function (pin) {
 };
 
 var fragment = document.createDocumentFragment();
-for (var i = 0; i < ads.length; i++) {
-  fragment.appendChild(renderPin(ads[i]));
+for (var i = 0; i < createArrayOfObjects(ELEMENTS_AMOUNT).length; i++) {
+  fragment.appendChild(renderPin(createArrayOfObjects(ELEMENTS_AMOUNT)[i]));
 }
 mapPins.appendChild(fragment);
